@@ -1,0 +1,34 @@
+version: '2'
+services:
+  neo4j:
+    container_name: secret-santa-neo4j
+    image: neo4j:latest
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "none"
+  secret-santa-server:
+    container_name: secret-santa-server
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: secret-santa-server:latest
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+    networks:
+      - "secret-santa-network"
+    volumes:
+      - "secret-santa-repo:/var/lib/spring-cloud/secret-santa-repo"
+    depends_on:
+      - neo4j
+    logging:
+      driver: json-file
+networks:
+  secret-santa-network:
+    driver: bridge
+volumes:
+  secret-santa-repo:
+      external: true

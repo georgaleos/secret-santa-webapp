@@ -1,0 +1,8 @@
+FROM alpine-java:base
+MAINTAINER george@elefth.com
+COPY files/spring-secret-santa.jar /opt/spring-cloud/lib/
+COPY files/secret-santa-entrypoint.sh /opt/spring-cloud/bin/
+ENTRYPOINT ["/usr/bin/java"]
+CMD ["-jar", "/opt/spring-cloud/lib/spring-secret-santa.jar"]
+VOLUME /var/lib/spring-cloud/secret-santa-repo
+EXPOSE 8081
